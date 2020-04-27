@@ -51,7 +51,14 @@ if ( is_admin() ) {
 	$post_type_admin->init();
 
 }
-
+// enqueue styles
+function atgl_posts_public_style() 
+{
+	wp_enqueue_style( 'atgl-market', 
+	plugin_dir_url(__FILE__) . '/css/atgl-style.css', array(), '1.0.1', false );
+}
+add_action( 'wp_enqueue_scripts', 'atgl_posts_public_style' );
+ 
 /**
  * Attaches the specified template to the page identified by the specified name.
  *
@@ -101,19 +108,38 @@ function atgl_posts_attach_single_template_to_page( $template ) {
 	} 
 	
 	// Taxonomies
-	add_filter('template_include', 'atgl_posts_set_template');
-	function atgl_posts_set_template( $template ){
-	
-		//Add option for plugin to turn this off? If so just return $template
-	
-		//Check if the taxonomy is being viewed 
-		//Suggested: check also if the current template is 'suitable'
-	
-		if( is_tax('market_category') && !atgl_posts_is_template($template))
-			$template = plugin_dir_url(__FILE__ ).'templates/archive-market.php';
-	
-		return $template;
-	}
+	function atgl_posts_attach_archive_template_to_page( $template ) {
+	// Post ID
+		//$post_id = get_the_ID();
+	 
+		// For all other CPT
+		if ( !is_tax('atgl_market_category') ) {
+			return $template;
+		}
+	 
+		// Else use custom template
+		if ( is_tax() ) {
+			return atgl_posts_archive_template_hierarchy( 'archive-market' );
+		}
+	} 
+	add_filter( 'template_include', 'atgl_posts_attach_archive_template_to_page' );
+    function atgl_posts_archive_template_hierarchy( $template ) {
+	 
+		// Get the template slug
+		$template_slug = rtrim( $template, '.php' );
+		$template = $template_slug . '.php';
+	 
+		// Check if a custom template exists in the theme folder, if not, load the plugin template file
+		if ( $theme_file = locate_template( array( 'plugin_template/' . $template ) ) ) {
+			$file = $theme_file;
+		}
+		else {
+			$file = plugin_dir_path( __FILE__ ) . 'templates/' . $template;
+		}
+	 
+		return apply_filters( 'atgl_posts_archive_template_' . $template, $file );
+	} 
+
 		
 require_once plugin_dir_path( __FILE__ ) . 'class-atgl-posts-formats.php';
 if( class_exists( 'Atgl_Post_Formats' ) ) : 
@@ -121,4 +147,5 @@ $formats = array('image', 'aside');
 asort($formats);
 $post_formats = new Atgl_Post_Formats( $formats, array( 'atgl_market' ) ); 
 endif; 
+?>
 ?>
