@@ -4,7 +4,7 @@
 * Donate link:       https://www.paypal.me/tradesouthwest
 * Requires at least: 4.5
 * Tested up to:      5.3
-* Stable tag:        1.0.1
+* Stable tag:        1.0.2
 * License:           GPLv2 or later
 * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,3 +28,7 @@ Creates a post type for Market and one for Education and taxonomies.
 #### Is this plugin on the WordPress repo?
 
 No.  It's meant to be more of a white-label plugin to use for specific client projects.
+
+### Change Log
+1.0.2
+* removed whitespace at EOF
