@@ -9,7 +9,7 @@
  * Plugin Name: ATGL Market Posts
  * Plugin URI:  http://github.com/tradesouthwest/atgl-posts
  * Description: Enables a post type for Market and one for Education and related taxonomies.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Larry Judd
  * Author URI:  https://tradesouthwest.com
  * Text Domain: atgl-market
@@ -147,5 +147,4 @@ $formats = array('image', 'aside');
 asort($formats);
 $post_formats = new Atgl_Post_Formats( $formats, array( 'atgl_market' ) ); 
 endif; 
-?>
 ?>
